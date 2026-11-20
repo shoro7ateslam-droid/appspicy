@@ -13,9 +13,11 @@ jobs:
       - working-directory: spicy_app
         run: flutter create . --org com.spicy --project-name original --platforms=android
       - working-directory: spicy_app
-        run: sed -i  s/android:label=\x22[^\x22]*\x22/android:label=\x22Spicy\x22/  android/app/src/main/AndroidManifest.xml
+        run: sed -i  s/android:label=\x22[^\x22]*\x22/android:label=\x22𝑺𝑷𝐼𝐶𝑌 𝐸𝐿𝐴𝑆𝐿𝑌😝🤙🏻\x22/  android/app/src/main/AndroidManifest.xml
       - working-directory: spicy_app
         run: flutter pub get
+      - working-directory: spicy_app
+        run: dart run flutter_launcher_icons
       - working-directory: spicy_app
         run: flutter build apk --release --obfuscate --split-debug-info=build/dbg
       - uses: actions/upload-artifact@v4
