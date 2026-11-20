@@ -13,7 +13,14 @@ jobs:
       - working-directory: spicy_app
         run: flutter create . --org com.spicy --project-name original --platforms=android
       - working-directory: spicy_app
-        run: sed -i  s/android:label=\x22[^\x22]*\x22/android:label=\x22𝑺𝑷𝐼𝐶𝑌 𝐸𝐿𝐴𝑆𝐿𝑌😝🤙🏻\x22/  android/app/src/main/AndroidManifest.xml
+        run: |
+          python3 -c "
+          import re
+          p =  android/app/src/main/AndroidManifest.xml 
+          s = open(p, encoding= utf-8 ).read()
+          s = re.sub(r android:label=\"[^\"]*\" ,  android:label=\"𝑺𝑷𝐼𝐶𝑌 𝐸𝐿𝐴𝑆𝐿𝑌😝🤙🏻\" , s)
+          open(p,  w , encoding= utf-8 ).write(s)
+          "
       - working-directory: spicy_app
         run: flutter pub get
       - working-directory: spicy_app
