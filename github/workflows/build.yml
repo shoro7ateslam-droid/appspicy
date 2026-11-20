@@ -1,0 +1,26 @@
+name: Build APK
+on: [workflow_dispatch, push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -q spicy_app.zip
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 17}
+      - uses: subosito/flutter-action@v2
+        with: {channel: stable}
+      - working-directory: spicy_app
+        run: flutter create . --org com.spicy --project-name original --platforms=android
+      - working-directory: spicy_app
+        run: |
+          sed -i  s/android:label="[^"]*"/android:label="Spicy"/  android/app/src/main/AndroidManifest.xml
+          sed -i  s#<application#<queries><intent><action android:name="android.intent.action.SENDTO"/><data android:scheme="mailto"/></intent><intent><action android:name="android.intent.action.VIEW"/><data android:scheme="https"/></intent></queries><application#  android/app/src/main/AndroidManifest.xml
+      - working-directory: spicy_app
+        run: flutter pub get
+      - working-directory: spicy_app
+        run: flutter build apk --release --obfuscate --split-debug-info=build/dbg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Spicy-APK
+          path: spicy_app/build/app/outputs/flutter-apk/app-release.apk
