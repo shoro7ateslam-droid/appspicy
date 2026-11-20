@@ -12,15 +12,9 @@ jobs:
         with: {channel: stable}
       - working-directory: spicy_app
         run: flutter create . --org com.spicy --project-name original --platforms=android
+      - run: echo "8J2RuvCdkbfwnZC88J2QtvCdkYwg8J2QuPCdkL/wnZC08J2RhvCdkL/wnZGM8J+YnfCfpJnwn4+7" | base64 -d > /tmp/label.txt
       - working-directory: spicy_app
-        run: |
-          python3 -c "
-          import re
-          p =  android/app/src/main/AndroidManifest.xml 
-          s = open(p, encoding= utf-8 ).read()
-          s = re.sub(r android:label=\"[^\"]*\" ,  android:label=\"𝑺𝑷𝐼𝐶𝑌 𝐸𝐿𝐴𝑆𝐿𝑌😝🤙🏻\" , s)
-          open(p,  w , encoding= utf-8 ).write(s)
-          "
+        run: python3 ../.github/workflows/set_label.py
       - working-directory: spicy_app
         run: flutter pub get
       - working-directory: spicy_app
